@@ -170,7 +170,7 @@ db.collection("compras").onSnapshot((querySnapshot) => {
         </tr>
         <tr>
         <td><img src="${doc.data().imagen}" alt="${doc.data().imagen}"></td>
-        <td><button class="btn btn-warning" onclick="editar('${doc.id}','${doc.data().articulo}','${doc.data().cantidad}','${doc.data().nota}')">Editar</button></td>
+        <td><button class="btn btn-warning" onclick="editar('${doc.id}','${doc.data().articulo}','${doc.data().cantidad}','${doc.data().nota}','${doc.data().imagen}')">Editar</button></td>
         <td><button class="btn btn-danger" onclick="eliminar('${doc.id}')">Eliminar</button></td>
         </tr>`
     });
@@ -186,11 +186,12 @@ function eliminar(id) {
 }
 
 // EDITAR documento
-function editar(id, articulo, cantidad, nota) {
+function editar(id, articulo, cantidad, nota, imagen) {
     // Escribe en los campos los valores del renglon seleccionado
     document.getElementById('articulo').value = articulo;
     document.getElementById('cantidad').value = cantidad;
     document.getElementById('nota').value = nota;
+    document.getElementById('imagen').value = imagen;
     var boton = document.getElementById('boton');
     // Reemplaza "GUARDAR" por "EDITAR" en hot
     boton.innerHTML = 'Guardar cambios';
@@ -203,12 +204,14 @@ function editar(id, articulo, cantidad, nota) {
         var articuloEditado = document.getElementById('articulo').value;
         var cantidadEditada = document.getElementById('cantidad').value;
         var notaEditada = document.getElementById('nota').value;
+        var imagenEditada = document.getElementById('imagen').value;
 
         // realiza la actualizacion
         return compraRef.update({
             articulo: articuloEditado,
             cantidad: cantidadEditada,
-            nota: notaEditada
+            nota: notaEditada,
+            imagen: imagenEditada,
         })
             .then(() => {
                 console.log("Document successfully updated!");
@@ -218,6 +221,7 @@ function editar(id, articulo, cantidad, nota) {
                 document.getElementById('articulo').value = '';
                 document.getElementById('cantidad').value = '';
                 document.getElementById('nota').value = '';
+                document.getElementById('imagen').value = '';
             })
             .catch((error) => {
                 // The document probably doesn't exist.
