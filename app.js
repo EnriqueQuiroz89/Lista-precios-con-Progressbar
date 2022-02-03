@@ -33,6 +33,12 @@ fileSelect.addEventListener("click", function (e) {
     e.preventDefault(); // prevent navigation to "#"
 }, false);
 
+// Cambiar Imagen
+fileSelect.addEventListener("click", function (e) { })
+
+
+
+
 // *********** Upload file to Cloudinary ******************** //
 function uploadFile(file) {
     var url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
@@ -41,13 +47,12 @@ function uploadFile(file) {
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
+    /**Limpia de la Galeria la Imagen Anterior*/
+    document.getElementById('gallery').innerHTML = '';
     // Reset the upload progress bar
     document.getElementById('progress').style.width = 0;
 
     // Update progress (can be used to show progress indicator)
-
-
-
     xhr.upload.addEventListener("progress", function (e) {
 
         document.getElementById('porcentaje').innerHTML = ``; /*Resetea el porcentaje*/
@@ -61,21 +66,18 @@ function uploadFile(file) {
         newLabel.innerHTML = `${progress} %`;
         document.getElementById('porcentaje').appendChild(newLabel);
 
-         console.log(`fileuploadprogress data.loaded: ${e.loaded},
+        console.log(`fileuploadprogress data.loaded: ${e.loaded},
   data.total: ${e.total}`);
 
         console.log(progress);
-        if(progress===100){
-            console.log('Hola mundo');
-            
-        document.getElementById('progress').style.background ="lime";
+        if (progress === 100) {
+            /**Cambia de color al finalizar la carga*/
+            document.getElementById('progress').style.background = "lime";
         }
-
 
     });
 
-
-
+    /**Area barra de progreso*/
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // File uploaded successfully
@@ -99,8 +101,11 @@ function uploadFile(file) {
             img.alt = response.public_id;  /**Por si no se muestra la imagen*/
 
             document.getElementById('gallery').appendChild(img); /**Agrega a la Galeria la imagen recien creada*/
+
             // Agregar url del Thumbnail al formulario
             document.getElementById('imagen').value = img.src;
+            /**Muestra la opcion para cambiar Imagen*/
+            document.getElementById('fileSelect').innerHTML = 'Cambiar imagen';
         }
     };
 
@@ -108,7 +113,7 @@ function uploadFile(file) {
     fd.append('tags', 'browser_upload'); // Optional - add tag for image admin in Cloudinary
     fd.append('file', file);
     xhr.send(fd);
-}
+} // Fin de upload FILE
 
 // *********** Handle selected files ******************** //
 var handleFiles = function (files) {
@@ -139,7 +144,13 @@ function guardar() {
             document.getElementById('nota').value = '';
             document.getElementById('imagen').value = '';
             /**Limpia la Galeria*/
-            document.getElementById('gallery').innerHTML = "";
+            document.getElementById('gallery').innerHTML = '';
+            /**Resetea la barra de progreso*/
+            document.getElementById('progress').style.width = 0;
+            /**Borra el porcentaje en numero*/
+            document.getElementById('porcentaje').innerHTML = '';
+            /**Regresa el texto original al elemento */
+            document.getElementById('fileSelect').innerHTML = 'Elige una imagen';
 
         })
         .catch((error) => {
